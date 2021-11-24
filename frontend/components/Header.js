@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import {APP_NAME} from "../config";
+import Link from 'next/link';
 
 import {
     NavItem,
@@ -20,9 +21,11 @@ const Header = () => {
                 expand="md"
                 light
             >
-                <NavbarBrand href="/">
-                {APP_NAME}
-                </NavbarBrand>
+                <Link href="/" passHref>
+                    <NavbarBrand>
+                    {APP_NAME}
+                    </NavbarBrand>
+                </Link>
                 <NavbarToggler onClick={() =>setIsOpen(!isOpen)} />
                 <Collapse isOpen={isOpen} navbar>
                 <Nav
@@ -30,14 +33,18 @@ const Header = () => {
                     navbar
                 >
                     <NavItem>
-                    <NavLink href="/components/">
-                        Components
-                    </NavLink>
+                        <Link href="/signup">
+                            <NavLink>
+                                Signup
+                            </NavLink>
+                        </Link>
                     </NavItem>
                     <NavItem>
-                    <NavLink href="https://github.com/reactstrap/reactstrap">
-                        GitHub
-                    </NavLink>
+                        <Link href="/signin">
+                            <NavLink>
+                                Signin
+                            </NavLink>
+                        </Link>
                     </NavItem>
     
                 </Nav>
