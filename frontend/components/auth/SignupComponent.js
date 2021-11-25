@@ -1,7 +1,8 @@
 import React from "react"
-import { useState } from "react"
+import { useState,useEffect } from "react"
 // import { signup } from "../../actions/auth";
-import {signup} from "../../actions/auth";
+import {signup,isAuth} from "../../actions/auth";
+import Router from "next/router";
 
 const SignupComponent = () => {
 
@@ -16,6 +17,11 @@ const SignupComponent = () => {
     });
 
     const {name,email,password,error,loading,message,showForm} = values;
+
+    //redirect user to home page if user is already logged in
+    useEffect(() =>{
+        isAuth() && Router.push(`/`)
+    },[])
 
     const handleSubmit = (e) =>{
         e.preventDefault()
