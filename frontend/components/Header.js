@@ -1,6 +1,8 @@
-import { useState } from 'react'
+import React, { useState } from 'react'
 import {APP_NAME} from "../config";
 import Link from 'next/link';
+import Router from 'next/router';
+import { signout,isAuth } from '../actions/auth';
 
 import {
     NavItem,
@@ -32,20 +34,32 @@ const Header = () => {
                     className="ml-auto"
                     navbar
                 >
+                    {!isAuth() && (
+                    <React.Fragment>
+                        <NavItem>
+                            <Link href="/signup">
+                                <NavLink>
+                                    Signup
+                                </NavLink>
+                            </Link>
+                        </NavItem>
+                        <NavItem>
+                            <Link href="/signin">
+                                <NavLink>
+                                    Signin
+                                </NavLink>
+                            </Link>
+                        </NavItem>
+                        </React.Fragment>
+                    )}
+
+                    {isAuth() && (
                     <NavItem>
-                        <Link href="/signup">
-                            <NavLink>
-                                Signup
-                            </NavLink>
-                        </Link>
+                        <NavLink style={{cursor:'pointer'}} onClick={() =>signout(() => Router.replace(`/signin`))}>
+                            Signout
+                        </NavLink>
                     </NavItem>
-                    <NavItem>
-                        <Link href="/signin">
-                            <NavLink>
-                                Signin
-                            </NavLink>
-                        </Link>
-                    </NavItem>
+                    )}
     
                 </Nav>
                 </Collapse>
