@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import Link from "next/link";
 import Router from "next/router";
 import { isAuth,getCookie } from "../../actions/auth";
-import { create } from "../../actions/category";
+import { createCategory } from "../../actions/category";
 
 const Category = () =>{
     const [values,setValues] = useState({
@@ -19,7 +19,7 @@ const Category = () =>{
     const clickSubmit = e =>{
         e.preventDefault()
         // console.log("category",name)
-        create({name},token).then(data =>{
+        createCategory({name},token).then(data =>{
             if(!data.status){
                 setValues({...values,error:data.msg,success:false})
             }else{
