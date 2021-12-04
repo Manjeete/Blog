@@ -4,11 +4,13 @@ const API = 'http://localhost:8000/api/v1/blog'
 
 //create category
 export const blogCreate = (blog,token) =>{
+    console.log(blog)
     return fetch(`${API}`,{
         method:'POST',
         headers:{
             Accept:'application/json',
             Authorization:`Bearer ${token}`
+            // "Content-Type": 'multipart/form-data',
         },
         body:blog
     })

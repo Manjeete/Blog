@@ -2,13 +2,16 @@ import Link from "next/link";
 import React, {useState,useEffect} from 'react';
 import Router from 'next/router';
 import dynamic from 'next/dynamic';
-import router, { withRouter } from "next/router";
+import{router,withRouter } from "next/router";
 import { getCookie,isAuth } from "../../actions/auth";
 import {getAllCategories} from '../../actions/category';
 import { getAllTags } from "../../actions/tag";
+import {blogCreate} from "../../actions/blog";
+import { default as FormData } from "form-data";
 
 const ReactQuill = dynamic(() =>import('react-quill'),{ssr:false})
 import "../../node_modules/react-quill/dist/quill.snow.css";
+import { QuillFormats,QuillModules } from "../../helpers/quill";
 
 const BlogCreate = ({router}) => {
 
@@ -23,6 +26,10 @@ const BlogCreate = ({router}) => {
             return false
         }
     }
+
+    // var forData = new FormData();
+    // forData.append('foo', 'bar');
+    
 
     const [categories,setCategories] = useState([])
     const [tags,setTags] = useState([])
@@ -41,16 +48,16 @@ const BlogCreate = ({router}) => {
     })
 
     const {error,sizeError,success,formData, title,handlePublishButton} = values;
+    const token = getCookie('token')
 
     useEffect(() =>{
-        setValues({...values,formData:new FormData()})
-        initCategories()
-        initTags()
+        setValues({...values,formData:new FormData()});
+        initCategories();
+        initTags();
     },[router])
 
     const initCategories = () =>{
         getAllCategories().then(data =>{
-            console.log(data)
             if(!data.status){
                 setValues({...values,error:data.msg})
             }else{
@@ -71,16 +78,26 @@ const BlogCreate = ({router}) => {
 
     const publishBlog = (e) =>{
         e.preventDefault()
-        console.log('ready to publishBlog')
+        blogCreate(formData,token).then(data =>{
+            if(!data.status){
+                setValues({...values,error:data.msg})
+            }else{
+                setValues({...values,title:'',error:'',success:`A new blog titled "${data.blog.title}" is created.`})
+                setBody('');
+                setCategories([]);
+                setTags([]);
+            }
+        })
     }
     
     const handleChange = name => e =>{
-        const value = name === 'photo' ? e.target.files[0]:e.target.value 
+        const value = name === 'photo' ? e.target.files[0]:e.target.value;
         formData.set(name,value);
-        setValues({...values,[name]:value,formData,error:''});
+        setValues({...values,[name]:value,formData:formData,error:''});
     };
     
     const handleBody = e =>{
+        console.log(e)
         setBody(e)
         formData.set('body',e)
         if(typeof window !== 'undefined'){
@@ -99,7 +116,6 @@ const BlogCreate = ({router}) => {
         }else{
             all.splice(clickedCategory,1)
         }
-        console.log(all)
         setCheckedCat(all)
         formData.set('categories',all)
     }
@@ -115,11 +131,9 @@ const BlogCreate = ({router}) => {
         }else{
             all.splice(clickedTag,1)
         }
-        console.log(all)
         setCheckedTag(all)
         formData.set('tags',all)
     }
-
     const showCategories = () =>{
         return (
             categories && categories.map((c,i) =>(
@@ -142,6 +156,18 @@ const BlogCreate = ({router}) => {
         )
     }
 
+    const showError = () =>{
+        return(
+            <div className="alert alert-danger" style={{display:error?'':'none'}}>{error}</div>
+        )
+    }
+
+    const showSuccess = () =>{
+        return(
+            <div className="alert alert-success" style={{display:success?'':'none'}}>{success}</div>
+        )
+    }
+
     const createBlogForm = () =>{
         return (
             <form onSubmit={publishBlog}>
@@ -151,7 +177,7 @@ const BlogCreate = ({router}) => {
                 </div>
     
                 <div className="form-group">
-                    <ReactQuill modules={BlogCreate.modules} formats={BlogCreate.formats} value={body} placeholder="Write something..." onChange={handleBody} />
+                    <ReactQuill modules={QuillModules} formats={QuillFormats} value={body} placeholder="Write something..." onChange={handleBody} />
                 </div>
     
                 <div>
@@ -162,14 +188,27 @@ const BlogCreate = ({router}) => {
     }
 
     return (
-        <div className="container-fluid">
+        <div className="container-fluid pb-5">
             <div className="row">
                 <div className="col-md-8">
                     {createBlogForm()}
-                    <hr />
-                    {JSON.stringify(tags)}
+                    <div className="pt-3">
+                        {showError()}
+                        {showSuccess()}
+                    </div>
                 </div>
                 <div className="col-md-4">
+                    <div>
+                        <div className="form-group pb-2">
+                            <h5>Featured image</h5>
+                            <hr />
+                            <small className='text-muted'>Max size: 1mb </small>
+                            <label className="btn btn-outline-info">
+                                Upload featured image
+                                <input onChange={handleChange('photo')} type="file" accept="image/*" hidden />
+                            </label>
+                        </div>
+                    </div>
                     <div>
                         <h5>Categories</h5>
                         <hr />
@@ -185,34 +224,5 @@ const BlogCreate = ({router}) => {
         </div>
     )
 }
-
-BlogCreate.modules = {
-    toolbar: [
-        [{ header: '1' }, { header: '2' }, { header: [3, 4, 5, 6] }, { font: [] }],
-        [{ size: [] }],
-        ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-        [{ list: 'ordered' }, { list: 'bullet' }],
-        ['link', 'image', 'video'],
-        ['clean'],
-        ['code-block']
-    ]
-};
-
-BlogCreate.formats = [
-    'header',
-    'font',
-    'size',
-    'bold',
-    'italic',
-    'underline',
-    'strike',
-    'blockquote',
-    'list',
-    'bullet',
-    'link',
-    'image',
-    'video',
-    'code-block'
-];
 
 export default withRouter(BlogCreate);
