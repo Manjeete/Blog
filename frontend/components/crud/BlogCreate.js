@@ -27,6 +27,9 @@ const BlogCreate = ({router}) => {
     const [categories,setCategories] = useState([])
     const [tags,setTags] = useState([])
 
+    const [checkedCat,setCheckedCat] = useState([])
+    const [checkedTag,setCheckedTag] = useState([])
+
     const [body,setBody] = useState(blogFromLS())
     const [values,setValues] = useState({
         error:'',
@@ -47,6 +50,7 @@ const BlogCreate = ({router}) => {
 
     const initCategories = () =>{
         getAllCategories().then(data =>{
+            console.log(data)
             if(!data.status){
                 setValues({...values,error:data.msg})
             }else{
@@ -84,11 +88,43 @@ const BlogCreate = ({router}) => {
         }
     };
 
+    const handleToggle = (c)  => ()=>{
+        setValues({...values,error:''})
+        //all cartegories
+        const all = [...checkedCat]
+        const clickedCategory = checkedCat.indexOf(c)
+
+        if(clickedCategory === -1){
+            all.push(c)
+        }else{
+            all.splice(clickedCategory,1)
+        }
+        console.log(all)
+        setCheckedCat(all)
+        formData.set('categories',all)
+    }
+
+    const handleTagsToggle = (t)  => ()=>{
+        setValues({...values,error:''})
+        //all cartegories
+        const all = [...checkedTag]
+        const clickedTag = checkedTag.indexOf(t)
+
+        if(clickedTag === -1){
+            all.push(t)
+        }else{
+            all.splice(clickedTag,1)
+        }
+        console.log(all)
+        setCheckedTag(all)
+        formData.set('tags',all)
+    }
+
     const showCategories = () =>{
         return (
             categories && categories.map((c,i) =>(
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" />
+                    <input onChange={handleToggle(c._id)} type="checkbox" className="mr-2" />
                     <label className="form-check-label">{c.name}</label>
                 </li>
             ))
@@ -99,7 +135,7 @@ const BlogCreate = ({router}) => {
         return (
             tags && tags.map((t,i) =>(
                 <li key={i} className="list-unstyled">
-                    <input type="checkbox" className="mr-2" />
+                    <input onChange={handleTagsToggle(t._id)} type="checkbox" className="mr-2" />
                     <label className="form-check-label">{t.name}</label>
                 </li>
             ))
