@@ -50,7 +50,6 @@ export const singleBlog = slug =>{
 
 
 //related blogs
-//create category
 export const listRelated = (blog) =>{
     return fetch(`${API}/related`,{
         method:'POST',
@@ -59,6 +58,51 @@ export const listRelated = (blog) =>{
             "Content-Type": 'application/json'
         },
         body:JSON.stringify(blog)
+    })
+    .then(response =>{
+        return response.json();
+    })
+    .catch(err =>console.log(err))
+}
+
+//list blogs for admin
+export const list = () =>{
+    return fetch(`${API}/`,{
+        method:'GET'
+    })
+    .then(response =>{
+        return response.json();
+    })
+    .catch(err =>console.log(err));
+}
+
+
+//delete blog
+export const removeBlog = (slug,token) =>{
+    return fetch(`${API}/${slug}`,{
+        method:'DELETE',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json',
+            Authorization:`Bearer ${token}`
+        }
+    })
+    .then(response =>{
+        return response.json();
+    })
+    .catch(err =>console.log(err))
+}
+
+
+//update blog
+export const updateBlog = (blog,token,slug) =>{
+    return fetch(`${API}/${slug}`,{
+        method:'PATCH',
+        headers:{
+            Accept:'application/json',
+            Authorization:`Bearer ${token}`
+        },
+        body:blog
     })
     .then(response =>{
         return response.json();
