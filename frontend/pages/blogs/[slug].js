@@ -1,13 +1,30 @@
 import Head from "next/head"
-import React,{ useState } from "react"
-import {singleBlog} from "../../actions/blog";
+import React,{ useState,useEffect } from "react"
+import {singleBlog,listRelated} from "../../actions/blog";
 import Link from "next/dist/client/link";
 import {API,DOMAIN,APP_NAME} from '../../config'
 import withRouter from "next/dist/client/with-router";
 import moment from "moment";
 import renderHTML from "react-render-html";
+import SmallCard from "../../components/blog/SmallCard"
 
 const SingleBlog = ({blog,router}) =>{
+
+    const [related,setRelated] = useState([])
+
+    const loadRelated = () => {
+        listRelated({blog}).then(data =>{
+            if(!data.status){
+                console.log(data.msg)
+            }else{
+                setRelated(data.blogs)
+            }
+        })
+    }
+
+    useEffect(() =>{
+        loadRelated();
+    },[]);
 
     const head = () =>(
         <Head>
@@ -33,6 +50,16 @@ const SingleBlog = ({blog,router}) =>{
                 </Link>
             )
         })
+    }
+
+    const showRelatedBlogs = () =>{
+        return related.map((blog,i) =>(
+            <div className="col-md-4" key={i}>
+                <article>
+                    <SmallCard blog={blog} />
+                </article>
+            </div>
+        ))
     }
 
     return <React.Fragment>
@@ -68,7 +95,9 @@ const SingleBlog = ({blog,router}) =>{
                         <div className="container pb-5">
                             <h4 className="text-center pt-5 pb-5 h2">Related blogs</h4>
                             <hr />
-                            <p>show related blogs</p>
+                            <div className="row">
+                                {showRelatedBlogs()}
+                            </div>
                         </div>
 
                         <div className="container pb-5">
