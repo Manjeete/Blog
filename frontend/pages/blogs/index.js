@@ -1,10 +1,45 @@
 import Head from "next/head"
-import React, { useState } from "react"
+import React,{ useState } from "react"
 import {listBlogsWithCategoriesAndTags} from "../../actions/blog";
 import BlogCard from "../../components/blog/BlogCard";
 import Link from "next/dist/client/link";
+import {API,DOMAIN,APP_NAME} from '../../config'
+import withRouter from "next/dist/client/with-router";
 
-const Blogs = ({blogs,categories,tags,size}) =>{
+const Blogs = ({blogs,categories,tags,totalBlogs,blogsLimit,blogsSkip,router}) =>{
+
+    const [limit,setLimit] = useState(blogsLimit)
+    const [skip,setSkip] = useState(0)
+    const [size,setSize] = useState(totalBlogs)
+    const [loadedBlogs,setLoadedBlogs] = useState([])
+
+    const loadMore = () =>{
+        let toSkip = skip+limit
+        listBlogsWithCategoriesAndTags(toSkip,limit).then(data =>{
+            if(!data.status){
+                console.log(data.msg)
+            }else{
+                setLoadedBlogs([...loadedBlogs,...data.blogs])
+                setSize(data.size)
+                setSkip(toSkip)
+            }
+        })
+    }
+
+    const loadMoreButton = () =>{
+        return (
+            size > 0 && size>=limit && (<button onClick={loadMore} className="btn btn-outline-primary btn-lg">Load more</button>)
+        )
+    }
+
+    const head = () =>(
+        <Head>
+            <title>Programming blogs | {APP_NAME}</title>
+            <meta name="description" content="Programming blogs and tutorials" />
+            <link rel="canonical" href={`${DOMAIN}${router.pathname}`} />
+            <meta property="og:title" content={`Latest web developments tutorials | ${APP_NAME}`} />
+        </Head>
+    )
 
     const showAllBlogs = () =>{
         return blogs.map((blog,i) =>{
@@ -32,8 +67,17 @@ const Blogs = ({blogs,categories,tags,size}) =>{
         ))
     }
 
+    const showLoadedBlogs = () =>{
+        return loadedBlogs.map((blog,i) =>(
+            <article key={i}>
+                <BlogCard blog={blog} />
+            </article>
+        ))
+    }
+
     return (
         <React.Fragment>
+            {head()}
             <main>
                 <div className="container-fluid">
                     <header>
@@ -50,17 +94,21 @@ const Blogs = ({blogs,categories,tags,size}) =>{
                     </header>
                 </div>
                 <div className="container-fluid">
-                    <div className="row">
-                        <div className="col-md-12">{showAllBlogs()}</div>
-                    </div>
+                    {showAllBlogs()}
                 </div>
+                <div className="container-fluid">
+                    {showLoadedBlogs()}
+                </div>
+                <div className="text-center pt-5 pb-5">{loadMoreButton()}</div>
             </main>
         </React.Fragment>
     )
 }
 
 Blogs.getInitialProps = () =>{
-    return listBlogsWithCategoriesAndTags().then(data =>{
+    let skip=0
+    let limit=2
+    return listBlogsWithCategoriesAndTags(skip,limit).then(data =>{
         if(!data.status){
             console.log(data.msg)
         }else{
@@ -68,10 +116,12 @@ Blogs.getInitialProps = () =>{
                 blogs:data.blogs,
                 categories:data.categories,
                 tags:data.tags,
-                size:data.results
+                totalBlogs:data.results,
+                blogsLimit:limit,
+                blogsSkip:skip
             }
         }
     })
 }
 
-export default Blogs;
+export default withRouter(Blogs);
