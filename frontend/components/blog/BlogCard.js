@@ -49,7 +49,7 @@ const BlogCard = ({blog}) => {
             <div className="row">
                 <div className="col-md-4">
                     <section>
-                        <img className="img img-fluid" style={{maxHeight:'150px',width:'auto'}} src={`${photoAPI}/photo/${blog.slug}`} alt={blog.title} />
+                        <img className="img img-fluid" style={{maxHeight:'auto',width:'100%'}} src={`${photoAPI}/photo/${blog.slug}`} alt={blog.title} />
                     </section>
                 </div>
                 <div className="col-md-8">
