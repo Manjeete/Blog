@@ -24,6 +24,10 @@ const Search = () => {
         setValues({...values,search:e.target.value,searched:false,results:[]})
     }
 
+    const handleLinkClick = () =>{
+        setValues({...values,searched:false})
+    }
+
     const searchedBlogs = (results = []) =>{
         return (
             <div className="jumbotron bg-white">
@@ -31,7 +35,7 @@ const Search = () => {
                 {results.map((blog,i) =>{
                     return <div key={i}>
                         <Link href={`/blogs/${blog.slug}`}>
-                            <a className="text-primary">{blog.title}</a>
+                            <a onClick={handleLinkClick} className="text-primary">{blog.title}</a>
                         </Link>
                     </div>
                 })}

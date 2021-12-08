@@ -23,7 +23,7 @@ Router.onRouteChangeError = url => NProgress.done()
 const Header = () => {
     const [isOpen,setIsOpen] = useState(false)
     return (
-        <div>
+        <React.Fragment>
             <Navbar
                 color="light"
                 expand="md"
@@ -103,7 +103,7 @@ const Header = () => {
                 </Collapse>
             </Navbar>
             <Search />
-</div>
+        </React.Fragment>
     )
 }
 
