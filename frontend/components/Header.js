@@ -4,6 +4,7 @@ import Link from 'next/link';
 import Router from 'next/router';
 import { signout,isAuth } from '../actions/auth';
 import NProgress from 'nprogress';
+import Search from './blog/Search';
 
 import {
     NavItem,
@@ -101,6 +102,7 @@ const Header = () => {
                 </Nav>
                 </Collapse>
             </Navbar>
+            <Search />
 </div>
     )
 }
