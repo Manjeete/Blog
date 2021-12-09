@@ -1,8 +1,9 @@
 import Link from "next/link"
 import React, { useEffect,useState } from "react"
 import Router from 'next/router'
-import { getCookie,isAuth } from "../../actions/auth"
+import { getCookie,isAuth,updateUser } from "../../actions/auth"
 import { getProfile,update } from "../../actions/user"
+import { API } from "../../config"
 
 
 const ProfileUpdate = () => {
@@ -27,11 +28,13 @@ const ProfileUpdate = () => {
             if(!data.status){
                 setValues({...values,error:data.msg})
             }else{
-                setValues({...values,
-                    username:data.profile.username,
-                    name:data.profile.name,
-                    email:data.profile.email,
-                    about:data.profile.about
+                updateUser(data.profile,() =>{
+                    setValues({...values,
+                        username:data.profile.username,
+                        name:data.profile.name,
+                        email:data.profile.email,
+                        about:data.profile.about
+                    })
                 })
             }
         })
@@ -60,7 +63,7 @@ const ProfileUpdate = () => {
                     name:data.profile.name,
                     email:data.profile.email,
                     about:data.profile.about,
-                    success:true,
+                    success:data.msg,
                     loading:false
                 })
             }
@@ -89,12 +92,12 @@ const ProfileUpdate = () => {
                 <input onChange={handleChange('email')} type="text" value={email} className="form-control" />
             </div>
             <div className="form-group">
-                <label className="text-muted">Password</label>
-                <input onChange={handleChange('password')} type="text" value={password} className="form-control" />
+                <label className="text-muted">About</label>
+                <textarea onChange={handleChange('about')} type="text" value={about} className="form-control" />
             </div>
             <div className="form-group">
-                <label className="text-muted">About</label>
-                <textarea onChange={handleChange('username')} type="text" value={about} className="form-control" />
+                <label className="text-muted">Password</label>
+                <input onChange={handleChange('password')} type="password" value={password} className="form-control" />
             </div>
             <div>
                 <button type="submit" className="btn btn-primary">Submit</button>
@@ -103,12 +106,34 @@ const ProfileUpdate = () => {
         )
     }
 
+    const showError = () =>(
+        <div className="alert alert-danger" style={{display:error?'':'none'}}>{error}</div>
+    )
+
+    const showSuccess = () =>(
+        <div className="alert alert-success" style={{display:success?'':'none'}}>{success}</div>
+    )
+
+    const showLoading = () =>(
+        <div className="alert alert-info" style={{display:loading?'':'none'}}>Loading...</div>
+    )
+
     return (
         <React.Fragment>
             <div className="container">
                 <div className="row">
-                    <div className="col-md-4">image</div>
+                    <div className="col-md-4">
+                        <img 
+                            src={`${API}/user/photo/${username}`} 
+                            className="img img-fluid img-thumbnail mb-3"
+                            style={{maxHeight:'auto',maxWidth:'100%'}}
+                            alt="user profile" 
+                        />
+                    </div>
                     <div className="col-md-8 mb-5">
+                        {showError()}
+                        {showSuccess()}
+                        {showLoading()}
                         {profileUpdateForm()}
                         
                     </div>
