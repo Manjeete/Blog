@@ -1,10 +1,20 @@
 import fetch from "isomorphic-fetch";
 const API = 'http://localhost:8000/api/v1/blog'
 import queryString from 'query-string';
+import { isAuth } from "./auth";
 
 //create category
 export const blogCreate = (blog,token) =>{
-    return fetch(`${API}`,{
+
+    let createBlogEnd;
+
+    if(isAuth() && isAuth().role===1){
+        createBlogEnd=`${API}`
+    }else if(isAuth() && isAuth().role===0){
+        createBlogEnd=`${API}/user`
+    }
+
+    return fetch(`${createBlogEnd}`,{
         method:'POST',
         headers:{
             Accept:'application/json',
@@ -66,8 +76,16 @@ export const listRelated = (blog) =>{
 }
 
 //list blogs for admin
-export const list = () =>{
-    return fetch(`${API}/`,{
+export const list = ({username}) =>{
+
+    let createBlogEnd;
+    if(username){
+        createBlogEnd=`${API}/${username}/blogs`
+    }else{
+        createBlogEnd=`${API}`
+    }
+
+    return fetch(`${createBlogEnd}`,{
         method:'GET'
     })
     .then(response =>{
@@ -79,7 +97,16 @@ export const list = () =>{
 
 //delete blog
 export const removeBlog = (slug,token) =>{
-    return fetch(`${API}/${slug}`,{
+
+    let deleteBlogEnd;
+
+    if(isAuth() && isAuth().role===1){
+        deleteBlogEnd=`${API}/${slug}`
+    }else if(isAuth() && isAuth().role===0){
+        deleteBlogEnd=`${API}/user/${slug}`
+    }
+
+    return fetch(`${deleteBlogEnd}`,{
         method:'DELETE',
         headers:{
             Accept:'application/json',
@@ -96,7 +123,16 @@ export const removeBlog = (slug,token) =>{
 
 //update blog
 export const updateBlog = (blog,token,slug) =>{
-    return fetch(`${API}/${slug}`,{
+
+    let updateBlogEnd;
+
+    if(isAuth() && isAuth().role===1){
+        updateBlogEnd=`${API}/${slug}`
+    }else if(isAuth() && isAuth().role===0){
+        updateBlogEnd=`${API}/user/${slug}`
+    }
+
+    return fetch(`${updateBlogEnd}`,{
         method:'PATCH',
         headers:{
             Accept:'application/json',

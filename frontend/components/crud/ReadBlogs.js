@@ -5,7 +5,7 @@ import {list,removeBlog} from "../../actions/blog";
 import Router from "next/router";
 import moment from "moment";
 
-const ReadBlogs = () =>{
+const ReadBlogs = ({username}) =>{
 
     const [blogs,setBlogs] = useState([])
     const [message,setMessage] = useState('')
@@ -16,7 +16,7 @@ const ReadBlogs = () =>{
     },[])
 
     const loadBlogs = () =>{
-        list().then(data =>{
+        list({username}).then(data =>{
             if(!data.status){
                 console.log(data.msg)
             }else{
@@ -28,7 +28,7 @@ const ReadBlogs = () =>{
     const deleteBlog = (slug) =>{
         removeBlog(slug,token).then(data =>{
             if(!data.status){
-                console.log(err)
+                console.log(data.msg)
             }else{
                 setMessage("Blog deleted")
                 loadBlogs()
@@ -46,8 +46,8 @@ const ReadBlogs = () =>{
     const showUpdateButton = (blog) =>{
         if(isAuth() && isAuth().role ===0){
             return (
-                <Link href={`/user/crud/blog/${blog.slug}`}>
-                    <a className="btn btn-sm btn-warning">Update</a>
+                <Link href={`/user/crud/${blog.slug}`}>
+                    <a className="ml-2 btn btn-sm btn-warning">Update</a>
                 </Link>
             )
         }else if(isAuth && isAuth().role===1){
