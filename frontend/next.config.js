@@ -7,6 +7,7 @@ module.exports = {
     API:'http://localhost:8000/api/v1',
     PRODUCTION:false,
     DOMAIN_DEVELOPMENT:"http://localhost:3000",
-    DOMAIN_PRODUCTION:'https://manjeet.com'
+    DOMAIN_PRODUCTION:'https://manjeet.com',
+    DISQUS_SHORTNAME:'blog-vkper12jwe'
   }
 };

@@ -2,11 +2,12 @@ import Head from "next/head"
 import React,{ useState,useEffect } from "react"
 import {singleBlog,listRelated} from "../../actions/blog";
 import Link from "next/dist/client/link";
-import {API,DOMAIN,APP_NAME} from '../../config'
+import {API,DOMAIN,APP_NAME, DISQUS_SHORTNAME} from '../../config'
 import withRouter from "next/dist/client/with-router";
 import moment from "moment";
 import renderHTML from "react-render-html";
 import SmallCard from "../../components/blog/SmallCard"
+import DisqusThread from "../../components/DisqusThread";
 
 const SingleBlog = ({blog,router}) =>{
 
@@ -62,6 +63,14 @@ const SingleBlog = ({blog,router}) =>{
         ))
     }
 
+    const showComments = () =>{
+        return (
+            <div>
+                <DisqusThread id={blog.id} title={blog.title} path={`/blog/${blog.slug}`} />
+            </div>
+        )
+    }
+
     return <React.Fragment>
         {head()}
         <main>
@@ -102,7 +111,7 @@ const SingleBlog = ({blog,router}) =>{
 
                         <div className="container pb-5">
                             
-                            <p>show comments</p>
+                            {showComments()}
                         </div>
                     </section>
                 </div>

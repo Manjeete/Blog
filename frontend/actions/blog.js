@@ -1,7 +1,7 @@
 import fetch from "isomorphic-fetch";
 const API = 'http://localhost:8000/api/v1/blog'
 import queryString from 'query-string';
-import { isAuth } from "./auth";
+import { isAuth,handleResponse } from "./auth";
 
 //create category
 export const blogCreate = (blog,token) =>{
@@ -24,6 +24,7 @@ export const blogCreate = (blog,token) =>{
         body:blog
     })
     .then(response =>{
+        handleResponse(response)
         return response.json();
     })
     .catch(err =>console.log(err))
@@ -115,6 +116,7 @@ export const removeBlog = (slug,token) =>{
         }
     })
     .then(response =>{
+        handleResponse(response)
         return response.json();
     })
     .catch(err =>console.log(err))
@@ -141,6 +143,7 @@ export const updateBlog = (blog,token,slug) =>{
         body:blog
     })
     .then(response =>{
+        handleResponse(response)
         return response.json();
     })
     .catch(err =>console.log(err))
