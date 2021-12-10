@@ -5,6 +5,7 @@ import { API,DOMAIN,APP_NAME} from '../../config'
 import React from 'react'
 import moment from 'moment'
 import withRouter from 'next/dist/client/with-router'
+import ContactForm from '../../components/form/ContactForm'
 
 
 const UserProfile = ({user,blogs,query,router}) =>{
@@ -84,7 +85,7 @@ const UserProfile = ({user,blogs,query,router}) =>{
                             <div className="card-body">
                                 <h5 className="card-title bg-primary pt-4 pb-4 pl-4 pr-4 text-light">Message {user.name}</h5>
                                 <br />
-                                <p>contact form</p>
+                                <ContactForm />
                             </div>
                         </div>
                     </div>
