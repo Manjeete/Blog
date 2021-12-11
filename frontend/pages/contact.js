@@ -1,6 +1,5 @@
 import Link from "next/link";
 import ContactForm from "../components/form/ContactForm";
-import { useState } from "react";
 
 const Contact = () =>{
     return (

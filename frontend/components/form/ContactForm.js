@@ -1,8 +1,9 @@
 import React, {useState} from 'react'
 import Link from 'next/link'
+import { emailContactForm } from '../../actions/form';
 
 
-const ContactForm = () =>{
+const ContactForm = ({authorEmail}) =>{
 
     const [values,setValues] = useState({
         message:'',
@@ -18,15 +19,30 @@ const ContactForm = () =>{
 
     const clickSubmit = e =>{
         e.preventDefault();
+        setValues({...values,buttonText:'Sending...'})
+        emailContactForm({authorEmail,name,email,message}).then(data =>{
+            console.log(data)
+            if(!data.status){
+                setValues({...values,error:"Error"})
+            }else{
+                setValues({...values,sent:true,name:'',email:'',message:'',buttonText:'Sent',success:data.success})
+            }
+        })
     }
 
     const handleChange = name => e =>{
         setValues({...values,[name]:e.target.value,error:false,success:false,buttonText:'Send Message'})
     }
 
+    const showSuccessMessage = () => success && <div className="alert alert-info">Thank you for contacting us.</div>
+
+    const showErrorMessage = () =>(
+        <div className="alert alert-danger" style={{display:error?'':'none'}}>{error}</div>
+    )
+
     const contactForm = () =>{
         return (
-            <form>
+            <form onSubmit={clickSubmit}>
                 <div className="form-group">
                     <label className="lead">Message</label>
                     <textarea onChange={handleChange('message')} type="text" className="form-control" value={message} required rows="8" ></textarea>
@@ -49,6 +65,8 @@ const ContactForm = () =>{
 
     return (
         <React.Fragment>
+            {showErrorMessage()}
+            {showSuccessMessage()}
             {contactForm()}
         </React.Fragment>
     )

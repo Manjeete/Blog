@@ -85,7 +85,7 @@ const UserProfile = ({user,blogs,query,router}) =>{
                             <div className="card-body">
                                 <h5 className="card-title bg-primary pt-4 pb-4 pl-4 pr-4 text-light">Message {user.name}</h5>
                                 <br />
-                                <ContactForm />
+                                <ContactForm authorEmail={user.email} />
                             </div>
                         </div>
                     </div>
