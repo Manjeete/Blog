@@ -3,6 +3,7 @@ import React from "react"
 import { useState,useEffect } from "react"
 // import { signup } from "../../actions/auth";
 import {signin,authenticate,isAuth} from "../../actions/auth";
+import Link from "next/dist/client/link";
 
 const SigninComponent = () => {
 
@@ -79,6 +80,10 @@ const SigninComponent = () => {
             {showLoading()}
             {showMessage()}
             {showForm && signinForm()}
+            <br />
+            <Link href="/auth/password/forgot">
+                <a className="btn btn-outline-danger btn-small">Reset password</a>
+            </Link>
         </React.Fragment>
     )
 }

@@ -140,3 +140,36 @@ export const updateUser = (user,next) =>{
         }
     }
 }
+
+//user forgot action
+export const forgotPassword = ({email}) =>{
+    return fetch(`${API}/forgot-password`,{
+        method:'PATCH',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify({email})
+    })
+    .then(response =>{
+        console.log(response)
+        return response.json()
+    })
+    .catch(err =>console.log(err))
+}
+
+
+export const resetPassword = resetInfo =>{
+    return fetch(`${API}/reset-password`,{
+        method:'PATCH',
+        headers:{
+            Accept:'application/json',
+            'Content-Type':'application/json'
+        },
+        body:JSON.stringify(resetInfo)
+    })
+    .then(response =>{
+        return response.json()
+    })
+    .catch(err =>console.log(err))
+}
