@@ -2,7 +2,7 @@ import fetch from "isomorphic-fetch";
 import cookie, { get } from 'js-cookie'
 import Router from "next/router";
 
-const API = 'http://localhost:8000/api/v1/auth'
+const API = 'https://blog077.herokuapp.com/api/v1/auth'
 
 export const handleResponse = response =>{
     if(response.status === 401){

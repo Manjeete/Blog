@@ -1,5 +1,5 @@
 import fetch from "isomorphic-fetch";
-const API = 'http://localhost:8000/api/v1'
+const API = 'https://blog077.herokuapp.com/api/v1'
 import { handleResponse } from "./auth";
 
 //create category
