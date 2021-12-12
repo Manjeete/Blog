@@ -2,7 +2,7 @@ import Link from "next/link"
 import moment from "moment"
 import renderHTML from "react-render-html"
 
-const photoAPI = "http://127.0.0.1:8000/api/v1/blog"
+const photoAPI = "https://blog077.herokuapp.com/api/v1/blog"
 
 const SmallCard = ({blog}) => {
 
