@@ -31,7 +31,7 @@ const Header = () => {
             >
                 <Link href="/" passHref>
                     <NavbarBrand>
-                    {APP_NAME}
+                    M'Blog
                     </NavbarBrand>
                 </Link>
                 <NavbarToggler onClick={() =>setIsOpen(!isOpen)} />

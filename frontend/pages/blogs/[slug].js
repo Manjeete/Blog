@@ -83,7 +83,7 @@ const SingleBlog = ({blog,router}) =>{
                     </section>
                     <section>
                         <div className="container">
-                            <h3 className="display-2 pb-3 text-center font-weight-bold">{blog.title}</h3>
+                            <h5 className="display-2 pb-3 text-center font-weight-bold">{blog.title}</h5>
                             <p className="lead mt-3 mark">
                                 Written by <Link href={`/profile/${blog.postedBy.username}`}>{blog.postedBy.username}</Link> | Published {moment(blog.updatedAt).fromNow()}
                             </p>
