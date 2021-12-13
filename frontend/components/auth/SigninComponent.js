@@ -8,8 +8,8 @@ import Link from "next/dist/client/link";
 const SigninComponent = () => {
 
     const [values,setValues] = useState({
-        email:'admin@gmail.com',
-        password:'123456',
+        email:'',
+        password:'',
         error:'',
         loading:false,
         message:'',

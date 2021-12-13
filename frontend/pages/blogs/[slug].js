@@ -78,12 +78,12 @@ const SingleBlog = ({blog,router}) =>{
                 <div className="container-fluid">
                     <section>
                         <div className="row" style={{marginTop:'-30px'}}>
-                            <img src={`${API}/api/v1/blog/photo/${blog.slug}`} alt={blog.title} className="img img-fluid featured_image" />
+                            <img src={`${API}/blog/photo/${blog.slug}`} alt={blog.title} className="img img-fluid featured_image" />
                         </div>
                     </section>
                     <section>
                         <div className="container">
-                            <h1 className="display-2 pb-3 text-center font-weight-bold">{blog.title}</h1>
+                            <h3 className="display-2 pb-3 text-center font-weight-bold">{blog.title}</h3>
                             <p className="lead mt-3 mark">
                                 Written by <Link href={`/profile/${blog.postedBy.username}`}>{blog.postedBy.username}</Link> | Published {moment(blog.updatedAt).fromNow()}
                             </p>
