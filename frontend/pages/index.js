@@ -3,6 +3,9 @@ import styles from '../styles/Home.module.css'
 import Link from 'next/link';
 
 const Index = () => {
+
+    const t = `The world's most popular frontend web development library`
+
     return (
         <>
             <article className="overflow-hidden">
@@ -47,7 +50,7 @@ const Index = () => {
                                             <h3 className="h1">React Js</h3>
                                         </a>
                                     </Link>
-                                    <p className="lead">The world's most popular frontend web development library</p>
+                                    <p className="lead">{t}</p>
                                 </div>
                             </div>
                         </div>
