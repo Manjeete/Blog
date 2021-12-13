@@ -36,7 +36,6 @@ const BlogCard = ({blog}) => {
             <section>
                 <p className="mark ml-1 pt-2 pb-2">
                     Written by <Link href={`/profile/${blog.postedBy.name}`}><a>{blog.postedBy.name}</a></Link> | Published {moment(blog.updatedAt).fromNow()}
-                    {/* {JSON.stringify(blog)} */}
                 </p>
             </section>
             <section>
